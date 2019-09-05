@@ -56,12 +56,27 @@
               <!-- Notes -->
               <div>
                 <!-- {{Current Notes}} -->
-                <iframe
-                  src="https://doc.new"
-                  width=100%
-                  height=600px
-                  noscroll="no">
-                </iframe>
+                <form id="notes">
+                  Currently on:<br/>
+                  Module
+                    <select name="module">
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                      <option value="4">4</option>
+                      <option value="5">5</option>
+                      <option value="6">6</option>
+                    </select>
+                  Section
+                    <input maxlength=2 type="number"></input>
+                  <br/><br/>
+
+                  Additional Notes:
+                  <textarea rows="10" cols="40" name="additional_notes" form="notes"></textarea>
+                  <br/><br/>
+
+                  <input type="submit"></input>
+                </form>
               </div>
             </div>
             <div class="col-4">
