@@ -1,4 +1,5 @@
 <!doctype html>
+
 <html lang="en">
   <head>
     <!-- Required meta tags -->
@@ -34,28 +35,28 @@
         <!-- Type of meeting -->
         <div>
           <h2>Student 1:1</h2>
-          <h3>{{Student Name}}
-          <h4 class="text-muted">{{Zoom Link}}</h4>
+          <h3>{Student Name}
+          <h4 class="text-muted">{Zoom Link}</h4>
         </div>
 
         <div class="container">
           <div class="row mb-3">
             <div class="col-4">
               <div id="timer">
-                {{TIMER TICKING}}
+                {TIMER TICKING}
               </div>
             </div>
             <div class="col-8">
               <div>
-                {{TIME}} - {{NEXT EVENT - clickable Zoom link}}
+                {TIME} - {NEXT EVENT - clickable Zoom link}
               </div>
             </div>
           </div>
           <div class="row">
-            <div class="col-8">
+            <div class="col-6">
               <!-- Notes -->
               <div>
-                <!-- {{Current Notes}} -->
+                <!-- {Current Notes} -->
                 <form id="notes">
                   Currently on:<br/>
                   Module
@@ -67,11 +68,12 @@
                       <option value="5">5</option>
                       <option value="6">6</option>
                     </select>
+                  <br/>
                   Section
                     <input maxlength=2 type="number"></input>
                   <br/><br/>
 
-                  Additional Notes:
+                  Additional Notes:<br/>
                   <textarea rows="10" cols="40" name="additional_notes" form="notes"></textarea>
                   <br/><br/>
 
@@ -79,10 +81,17 @@
                 </form>
               </div>
             </div>
-            <div class="col-4">
+            <div class="col-6">
               <!-- Past Notes -->
               <div>
-                {{PAST NOTES}}
+                  <h3>{PAST NOTES}</h3>
+                  <hr/>
+                  <div>
+                      <h4>{DATE}</h4>
+                      <p>
+                          {RECENT NOTE}
+                      </p>
+                  </div>
               </div>
             </div>
           </div>
@@ -93,7 +102,7 @@
       <!-- Right Navigation-->
       <div class="col-1 border-left">
         <a href="https://www.github.com/MrGeislinger">
-          <img class="img-fluid mt-2 ml-4" src="assets/githublogo.png" alt="github logo">
+          <img class="img-fluid mt-2 ml-4" src="/static/assets/githublogo.png" alt="github logo">
         </a>
         <!-- <a href="https://github.com/MrGeislinger/flatiron-school-data-science-curriculum-resources">
           <img class="img-fluid mt-2 ml-4" src="assets/githublogo.png" alt="github logo">
