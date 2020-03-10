@@ -35,8 +35,12 @@
         <!-- Type of meeting -->
         <div>
           <h2>Student 1:1</h2>
-          <h3>{Student Name}
-          <h4 class="text-muted">{Zoom Link}</h4>
+          <h3>{{student_name}}</h3>
+          <h4 class="text-muted">
+            <a href="{{zoom_link}}">
+              {{zoom_link}}
+            </a>
+          </h4>
         </div>
 
         <div class="container">
@@ -48,7 +52,10 @@
             </div>
             <div class="col-8">
               <div>
-                {TIME} - {NEXT EVENT - clickable Zoom link}
+                <b>Start:</b> {{event_time_start}}
+              </div>
+              <div>
+                <b>End:</b> {{event_time_end}}
               </div>
             </div>
           </div>
@@ -58,6 +65,8 @@
               <div>
                 <!-- {Current Notes} -->
                 <form id="notes">
+                  <b>Status:</b><br/>
+                  <input style="width:100%;" type="text" id="status" name="status" placeholder="{{status}}"><br/>
                   Currently on:<br/>
                   Module
                     <select name="module">
@@ -74,17 +83,19 @@
                   <br/><br/>
 
                   Additional Notes:<br/>
-                  <textarea rows="10" cols="40" name="additional_notes" form="notes"></textarea>
+                  <div style="float: left;width:95%;margin-top:6px;">
+                    <textarea style="height:200px;width:100%;" name="additional_notes" form="notes"></textarea>
+                  </div>
                   <br/><br/>
 
-                  <input type="submit"></input>
+                  <input type="submit" ></input>
                 </form>
               </div>
             </div>
             <div class="col-6">
               <!-- Past Notes -->
               <div>
-                  <h3>{PAST NOTES}</h3>
+                  <h3>Past Notes</h3>
                   <hr/>
                   <div>
                       <h4>{DATE}</h4>
@@ -95,7 +106,6 @@
               </div>
             </div>
           </div>
-
         </div>
       </div>
 
