@@ -1,0 +1,18 @@
+<!doctype html>
+
+<html>
+<head>
+  <title>Cohorts</title>
+</head>
+
+<body>
+  <h1>Cohorts</h1>
+  <ul>
+    {% for cohort in all_cohorts %}
+      <li>
+        <b>{{cohort.name}}</b> graduates on <i>{{cohort.start_date.strftime('%a %b %d %Y')}}</i>
+      </li>
+    {% endfor %}
+  </ul>
+</body>
+</html>

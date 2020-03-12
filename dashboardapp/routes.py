@@ -1,5 +1,7 @@
 from flask import render_template
-from dashboardapp import app
+from dashboardapp import app, db
+from database import actions
+from database.models import Cohort, Student
 
 from datetime import datetime, timedelta
 
@@ -9,10 +11,51 @@ def index():
     # TODO: Default page
     return render_template('index.html')
 
+@app.route('/create-db')
+def create_db():
+    '''
+    Creates database.
+    '''
+    print('Create database...')
+    actions.create_db()
+    return render_template(
+                'base-template.html',
+                data = ['Database created']
+    )
+
+@app.route('/all-cohorts')
+@app.route('/cohorts')
+def display_all_cohorts():
+    '''
+    Displays all cohorts already created.
+    '''
+    print('Looking up Cohorts in database...')
+    # TODO: Create more filters for cohorts (graduated, pacing, etc.)
+    all_cohorts = Cohort.query.all()
+    return render_template(
+                'cohorts.html',
+                all_cohorts = all_cohorts
+    )
+
+
+@app.route('/create-cohort')
+def create_cohort():
+    '''
+    Creates entry in database of a new cohort.
+    '''
+    print('Creating Cohort...')
+    # TODO: Ask for data to create cohort
+    actions.create_cohort('New Cohort',datetime.now())
+    return render_template('index.html')
+
 @app.route('/one-on-one')
 @app.route('/1-on-1')
 @app.route('/1-1')
 def project_one():
+    '''
+    Page for when on a one-on-one call. Allows for input notes to the database
+    for the call.
+    '''
     # TODO: Find relevant meeting (student) by time for apppointment
     # TODO: Get current event name to display
     # event_name = event['summary']
