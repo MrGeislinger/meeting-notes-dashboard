@@ -60,10 +60,6 @@ def project_one():
     Page for when on a one-on-one call. Allows for input notes to the database
     for the call.
     '''
-    # TODO: Find relevant meeting (student) by time for apppointment
-    # TODO: Get current event name to display
-    # event_name = event['summary']
-    event_name = 'NAME OF EVENT'
 
     # Date display format
     DATE_FORMAT_STRING = '%H:%M - %a %b %d'
@@ -72,14 +68,24 @@ def project_one():
     events = gcal.get_one_on_one_events(now)
     event = gcal.get_current_one_on_one(events)
 
-    # TODO: Change format (using datetime)
-    event_time_start = event.get('start').get('dateTime')
-    event_time_end = event.get('end').get('dateTime')
+    # Change format (using datetime)
+    DATE_FORMAT_IN = '%Y-%m-%dT%H:%M:%S-'
+    event_time_start = datetime.strptime(
+                            event.get('start').get('dateTime')[:-5],
+                            DATE_FORMAT_IN
+    )
+    event_time_end = datetime.strptime(
+                            event.get('end').get('dateTime')[:-5],
+                            DATE_FORMAT_IN
+    )
+    event_time_start = datetime.strftime(event_time_start,DATE_FORMAT_STRING)
+    event_time_end = datetime.strftime(event_time_end,DATE_FORMAT_STRING)
 
-
-    # TODO: Pull other information relevant for template (from event)
-    student_name = 'STUDENT NAME'
-    zoom_link = 'https://example.com/zoomlink'
+    # Pull other information relevant for template (from event)
+    # TODO: Some sort of name override (for misspellings or different spellings)
+    student_name = event.get('summary').split('-')[0]
+    # TODO: Ensure this is a URL
+    zoom_link = event.get('location')
 
     # TODO: Pull info from database
     prev_status = 'Previous status for student updates'
@@ -89,7 +95,6 @@ def project_one():
         student_name = student_name,
         zoom_link = zoom_link,
         status = prev_status,
-        event_name = event_name,
         event_time_start = event_time_start,
         event_time_end = event_time_end
     )

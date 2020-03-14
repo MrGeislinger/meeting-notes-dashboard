@@ -63,5 +63,5 @@ def get_one_on_one_events(start_time, max_results=10):
 def get_current_one_on_one(one_on_one_events):
     '''
     '''
-    #
+    # TODO: Check if current time is between start & end time
     return one_on_one_events[0]
