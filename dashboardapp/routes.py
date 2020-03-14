@@ -1,8 +1,12 @@
+# Flask app
 from flask import render_template
 from dashboardapp import app, db
+# Database
 from database import actions
 from database.models import Cohort, Student
-
+# Getting events (Google API)
+from events import google_events as gcal
+# Other necessary libraries
 from datetime import datetime, timedelta
 
 @app.route('/')
@@ -63,10 +67,15 @@ def project_one():
 
     # Date display format
     DATE_FORMAT_STRING = '%H:%M - %a %b %d'
-    # TODO: Get time of event (start and end)
+    # Get time of event (start and end)
     now = datetime.now()
-    event_time_start = now.strftime(DATE_FORMAT_STRING)
-    event_time_end = (now + timedelta(0,30*60)).strftime(DATE_FORMAT_STRING)
+    events = gcal.get_one_on_one_events(now)
+    event = gcal.get_current_one_on_one(events)
+
+    # TODO: Change format (using datetime)
+    event_time_start = event.get('start').get('dateTime')
+    event_time_end = event.get('end').get('dateTime')
+
 
     # TODO: Pull other information relevant for template (from event)
     student_name = 'STUDENT NAME'
