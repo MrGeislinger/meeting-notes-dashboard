@@ -37,7 +37,8 @@ def get_service():
     return service
 
 
-def get_one_on_one_events(start_time, max_results=10):
+def get_one_on_one_events(start_time, include_strs=('1:1','1 on 1'), 
+        exclude_strs=('RESERVED','<>'), max_results=10):
     '''
     '''
     service = get_service()
@@ -52,10 +53,11 @@ def get_one_on_one_events(start_time, max_results=10):
         print('No upcoming events found.')
 
 
-    # Only get "1 on 1" events based on event summary (name of event)
-    one_on_one_str = '1 on 1'
+    # Only get events based on event summary (name of event)
     one_on_one_events = [event for event in events
-                                    if one_on_one_str in event['summary']]
+                                    if any(s in event['summary'] for s in include_strs)
+                                    and not any(s in event['summary'] for s in exclude_strs)
+    ]
 
     return one_on_one_events
 

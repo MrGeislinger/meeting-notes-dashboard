@@ -83,7 +83,7 @@ def project_one():
 
     # Pull other information relevant for template (from event)
     # TODO: Some sort of name override (for misspellings or different spellings)
-    student_name = event.get('summary').split('-')[0]
+    event_name = event.get('summary')
     # TODO: Ensure this is a URL
     zoom_link = event.get('location')
 
@@ -92,9 +92,10 @@ def project_one():
 
     return render_template(
         'one-on-one.html',
-        student_name = student_name,
+        event_name = event_name,
         zoom_link = zoom_link,
         status = prev_status,
         event_time_start = event_time_start,
-        event_time_end = event_time_end
+        event_time_end = event_time_end,
+        extra_debug = ''
     )
