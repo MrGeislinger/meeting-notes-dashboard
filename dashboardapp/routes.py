@@ -1,5 +1,5 @@
 # Flask app
-from flask import render_template
+from flask import render_template, request
 from dashboardapp import app, db
 # Database
 from database import actions
@@ -42,15 +42,34 @@ def display_all_cohorts():
     )
 
 
-@app.route('/create-cohort')
+@app.route('/create-cohort', methods=['GET','POST'])
 def create_cohort():
     '''
     Creates entry in database of a new cohort.
     '''
     print('Creating Cohort...')
-    # TODO: Ask for data to create cohort
-    actions.create_cohort('New Cohort',datetime.now())
-    return render_template('index.html')
+    # Ask for data to create cohort
+    cohort_name = request.form.get('cohort_name')
+    cohort_start = request.form.get('cohort_start')
+    cohort_grad = request.form.get('cohort_grad')
+    # Check if required entries are included 
+    if cohort_name and cohort_start:
+        # Convert strings into datetime
+        cohort_start = datetime.strptime(
+            cohort_start,
+            '%Y-%m-%d'
+        )
+        # Only attempt if graduation date given
+        if cohort_grad:
+            cohort_grad = datetime.strptime(
+               cohort_grad,
+               '%Y-%m-%d'
+            )
+        else:
+            cohort_grad = None
+        actions.create_cohort(cohort_name,cohort_start,cohort_grad)
+    # Use method to display all cohorts
+    return display_all_cohorts()
 
 @app.route('/one-on-one')
 @app.route('/1-on-1')
