@@ -51,7 +51,7 @@ def create_cohort():
     # Ask for data to create cohort
     cohort_name = request.form.get('cohort_name')
     cohort_start = request.form.get('cohort_start')
-    cohort_grad = request.form.get('cohort_grad')
+    cohort_grad = request.form.get('cohort_graduate')
     # Check if required entries are included 
     if cohort_name and cohort_start:
         # Convert strings into datetime
