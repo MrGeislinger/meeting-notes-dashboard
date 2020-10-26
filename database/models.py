@@ -29,3 +29,16 @@ class Cohort(db.Model):
 
     def __repr__(self):
         return f'<Cohort {self.name}>'
+
+class Meeting(db.Model):
+    '''
+    Some type of meeting 
+    '''
+    id = db.Column(db.Integer, primary_key=True)
+    date = db.Column(db.DateTime, nullable=False)
+    # TODO: Include participants
+    event_type = db.Column(db.String(50), nullable=False)
+    # Student met with
+
+    def __repr__(self):
+        return f'<{self.event_type} Meeting on {self.date}>'

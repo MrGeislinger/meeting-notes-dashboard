@@ -1,9 +1,9 @@
 # Flask app
 from flask import render_template, request
 from dashboardapp import app, db
-# Database
+# DatabaseMz
 from database import actions
-from database.models import Cohort, Student
+from database.models import Cohort, Student, Meeting
 # Getting events (Google API)
 from events import google_events as gcal
 # Other necessary libraries
@@ -93,6 +93,21 @@ def add_student():
     all_cohorts = Cohort.query.all()
 
     return render_template('add-student.html',all_cohorts=all_cohorts)
+
+@app.route('/create-meeting', methods=['GET','POST'])
+def create_meeting():
+    '''
+    '''
+    actions.new_meeting(datetime.now(),'1:1')
+    return display_all_meetings()
+
+@app.route('/all-meetings')
+@app.route('/meetings')
+def display_all_meetings():
+    '''
+    '''
+    all_meetings = Meeting.query.all()
+    return render_template('base-template.html',data=all_meetings)
 
 @app.route('/one-on-one')
 @app.route('/1-on-1')
