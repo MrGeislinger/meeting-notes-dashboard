@@ -1,9 +1,9 @@
 # Flask app
 from flask import render_template, request
 from dashboardapp import app, db
-# Database
+# DatabaseMz
 from database import actions
-from database.models import Cohort, Student
+from database.models import Cohort, Student, Meeting, Note
 # Getting events (Google API)
 from events import google_events as gcal
 # Other necessary libraries
@@ -94,10 +94,25 @@ def add_student():
 
     return render_template('add-student.html',all_cohorts=all_cohorts)
 
-@app.route('/one-on-one')
-@app.route('/1-on-1')
-@app.route('/1-1')
-def project_one():
+@app.route('/create-meeting', methods=['GET','POST'])
+def create_meeting():
+    '''
+    '''
+    actions.new_meeting(datetime.now(),'1:1')
+    return display_all_meetings()
+
+@app.route('/all-meetings')
+@app.route('/meetings')
+def display_all_meetings():
+    '''
+    '''
+    all_meetings = Meeting.query.all()
+    return render_template('base-template.html',data=all_meetings)
+
+@app.route('/one-on-one', methods=['GET','POST'])
+@app.route('/1-on-1', methods=['GET','POST'])
+@app.route('/1-1', methods=['GET','POST'])
+def one_on_one():
     '''
     Page for when on a one-on-one call. Allows for input notes to the database
     for the call.
@@ -122,15 +137,65 @@ def project_one():
     )
     event_time_start = datetime.strftime(event_time_start,DATE_FORMAT_STRING)
     event_time_end = datetime.strftime(event_time_end,DATE_FORMAT_STRING)
+    event_date = event.get('start').get('dateTime')[:10]
 
     # Pull other information relevant for template (from event)
     # TODO: Some sort of name override (for misspellings or different spellings)
     event_name = event.get('summary')
+    
+    # TODO: Find Student entry by name
+    for test_str in event_name.split('-'):
+        test_str = test_str.strip()
+        student = Student.query.filter_by(name=test_str).first()
+        if student:
+            student_id = student.id
+            break
+
     # TODO: Ensure this is a URL
     zoom_link = event.get('location')
 
     # TODO: Pull info from database
     prev_status = 'Previous status for student updates'
+
+    # On submit
+    module = request.form.get('module')
+    additional_notes = request.form.get('additional_notes')
+    status = request.form.get('status')
+    if module:
+        try:
+            time = request.form.get('time')
+            date = request.form.get('date')
+            date_time = datetime.strptime(
+                        f'{date}T{time}',
+                        '%Y-%m-%dT%H:%M'
+            )
+        # Use the current time if not defined
+        except:
+            date_time = now
+        meeting = actions.new_meeting(date_time,'1:1')
+        # 
+        actions.add_note(
+            note=additional_notes,
+            status=status,
+            meeting_id=meeting.id,
+            student_id=student_id,
+            time=date_time
+        )
+
+    # Get past notes
+    print('Recent Notes')
+    try:
+        recent_notes = (Note.query.join(Meeting, Meeting.id == Note.meeting_id)
+            .filter(Note.student_id==student_id)
+            .order_by(Note.time.desc())
+            .limit(3).all()
+        )
+    # If issues with getting recent note (student doesn't exist yet)
+    # TODO: Alert and provide info to add student
+    except:
+        recent_notes = []
+    if recent_notes:
+        prev_status = recent_notes[0].status
 
     return render_template(
         'one-on-one.html',
@@ -139,5 +204,15 @@ def project_one():
         status = prev_status,
         event_time_start = event_time_start,
         event_time_end = event_time_end,
+        event_date = event_date,
+        recent_notes=recent_notes,
         extra_debug = ''
     )
+
+@app.route('/all-notes')
+@app.route('/notes')
+def display_all_notes():
+    '''
+    '''
+    all_notes = Note.query.all()
+    return render_template('base-template.html',data=all_notes)
