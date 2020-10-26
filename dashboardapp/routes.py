@@ -1,5 +1,5 @@
 # Flask app
-from flask import render_template
+from flask import render_template, request
 from dashboardapp import app, db
 # Database
 from database import actions
@@ -42,15 +42,57 @@ def display_all_cohorts():
     )
 
 
-@app.route('/create-cohort')
+@app.route('/create-cohort', methods=['GET','POST'])
 def create_cohort():
     '''
     Creates entry in database of a new cohort.
     '''
     print('Creating Cohort...')
-    # TODO: Ask for data to create cohort
-    actions.create_cohort('New Cohort',datetime.now())
-    return render_template('index.html')
+    # Ask for data to create cohort
+    cohort_name = request.form.get('cohort_name')
+    cohort_start = request.form.get('cohort_start')
+    cohort_grad = request.form.get('cohort_graduate')
+    # Check if required entries are included 
+    if cohort_name and cohort_start:
+        # Convert strings into datetime
+        cohort_start = datetime.strptime(
+            cohort_start,
+            '%Y-%m-%d'
+        )
+        # Only attempt if graduation date given
+        if cohort_grad:
+            cohort_grad = datetime.strptime(
+               cohort_grad,
+               '%Y-%m-%d'
+            )
+        else:
+            cohort_grad = None
+        actions.create_cohort(cohort_name,cohort_start,cohort_grad)
+    # Use method to display all cohorts
+    return display_all_cohorts()
+
+@app.route('/all-students')
+@app.route('/students')
+def display_all_students():
+    return render_template('students.html',all_students=Student.query.all())
+
+@app.route('/add-student', methods=['GET','POST'])
+def add_student():
+    '''
+    '''
+    #
+    student_name = request.form.get('student_name')
+    student_email = request.form.get('student_email')
+    student_cohort = request.form.get('student_cohort')
+    # Check if entries given (submitted)
+    if student_name and student_email and student_cohort:
+        print('Adding student')
+        actions.add_student(student_name,student_email,student_cohort)
+        return render_template('students.html',all_students=Student.query.all())
+    # Get all the cohorts to add student to
+    all_cohorts = Cohort.query.all()
+
+    return render_template('add-student.html',all_cohorts=all_cohorts)
 
 @app.route('/one-on-one')
 @app.route('/1-on-1')

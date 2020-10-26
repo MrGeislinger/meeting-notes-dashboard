@@ -1,0 +1,44 @@
+<!doctype html>
+
+<html>
+<head>
+  <title>Add Student</title>
+</head>
+
+<body>
+  <!-- <div>
+    <h1>Cohorts</h1>
+    <ul>
+      {% for cohort in all_cohorts %}
+        <li>
+          <b>{{cohort.name}}</b> 
+          {% if cohort.graduation_date %}
+            graduates on <i>{{cohort.graduation_date.strftime('%a %b %d %Y')}}</i>
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+  </div> -->
+  <hr/>
+  <div>
+    <h1>Add New Student</h1>
+    
+    <form id="new_student" action="{{ url_for('add_student') }}" method="post">
+      <label for="student_name">Student Name:</label>
+      <input type="text" id="student_name" name="student_name">
+      <br/>
+      <label for="student_email">Student Email:</label>
+      <input type="email" id="student_email" name="student_email">
+      <br/>
+      <!-- <label for="cohort_graduate">Cohort Graduation:</label>
+      <input type="date" id="cohort_graduate" name="cohort_graduate"> -->
+      <select id="student_cohort" name="student_cohort">
+        {% for cohort in all_cohorts %}
+        <option value="{{cohort.id}}">{{cohort.name}}</option>
+        {% endfor %} 
+      </select>
+      <input type="submit">
+    </form>
+  </div>
+</body>
+</html>

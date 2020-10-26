@@ -6,13 +6,34 @@
 </head>
 
 <body>
-  <h1>Cohorts</h1>
-  <ul>
-    {% for cohort in all_cohorts %}
-      <li>
-        <b>{{cohort.name}}</b> graduates on <i>{{cohort.start_date.strftime('%a %b %d %Y')}}</i>
-      </li>
-    {% endfor %}
-  </ul>
+  <div>
+    <h1>Cohorts</h1>
+    <ul>
+      {% for cohort in all_cohorts %}
+        <li>
+          <b>{{cohort.name}}</b> 
+          {% if cohort.graduation_date %}
+            graduates on <i>{{cohort.graduation_date.strftime('%a %b %d %Y')}}</i>
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+  <hr/>
+  <div>
+    <h1>Create New Cohort</h1>
+    
+    <form id="new_cohort" action="{{ url_for('create_cohort') }}" method="post">
+      <label for="cohort_name">Cohort Name:</label>
+      <input type="text" id="cohort_name" name="cohort_name">
+      <br/>
+      <label for="cohort_start">Start of Cohort:</label>
+      <input type="date" id="cohort_start" name="cohort_start">
+      <br/>
+      <label for="cohort_graduate">Cohort Graduation:</label>
+      <input type="date" id="cohort_graduate" name="cohort_graduate">
+      <input type="submit">
+    </form>
+  </div>
 </body>
 </html>
