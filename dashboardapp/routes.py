@@ -184,11 +184,16 @@ def one_on_one():
 
     # Get past notes
     print('Recent Notes')
-    recent_notes = (Note.query.join(Meeting, Meeting.id == Note.meeting_id)
-        .filter(Note.student_id==student_id)
-        .order_by(Note.time.desc())
-        .limit(3).all()
-    )
+    try:
+        recent_notes = (Note.query.join(Meeting, Meeting.id == Note.meeting_id)
+            .filter(Note.student_id==student_id)
+            .order_by(Note.time.desc())
+            .limit(3).all()
+        )
+    # If issues with getting recent note (student doesn't exist yet)
+    # TODO: Alert and provide info to add student
+    except:
+        recent_notes = []
     if recent_notes:
         prev_status = recent_notes[0].status
 
