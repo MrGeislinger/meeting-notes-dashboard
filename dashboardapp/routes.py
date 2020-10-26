@@ -137,6 +137,7 @@ def one_on_one():
     )
     event_time_start = datetime.strftime(event_time_start,DATE_FORMAT_STRING)
     event_time_end = datetime.strftime(event_time_end,DATE_FORMAT_STRING)
+    event_date = event.get('start').get('dateTime')[:10]
 
     # Pull other information relevant for template (from event)
     # TODO: Some sort of name override (for misspellings or different spellings)
@@ -161,15 +162,24 @@ def one_on_one():
     additional_notes = request.form.get('additional_notes')
     status = request.form.get('status')
     if module:
-        now = datetime.now()
-        meeting = actions.new_meeting(now,'1:1')
+        try:
+            time = request.form.get('time')
+            date = request.form.get('date')
+            date_time = datetime.strptime(
+                        f'{date}T{time}',
+                        '%Y-%m-%dT%H:%M'
+            )
+        # Use the current time if not defined
+        except:
+            date_time = now
+        meeting = actions.new_meeting(date_time,'1:1')
         # 
         actions.add_note(
             note=additional_notes,
             status=status,
             meeting_id=meeting.id,
             student_id=student_id,
-            time=now
+            time=date_time
         )
 
     # Get past notes
@@ -189,6 +199,7 @@ def one_on_one():
         status = prev_status,
         event_time_start = event_time_start,
         event_time_end = event_time_end,
+        event_date = event_date,
         recent_notes=recent_notes,
         extra_debug = ''
     )
