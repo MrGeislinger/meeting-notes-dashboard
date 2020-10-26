@@ -3,7 +3,7 @@ from flask import render_template, request
 from dashboardapp import app, db
 # DatabaseMz
 from database import actions
-from database.models import Cohort, Student, Meeting
+from database.models import Cohort, Student, Meeting, Note
 # Getting events (Google API)
 from events import google_events as gcal
 # Other necessary libraries
@@ -109,10 +109,10 @@ def display_all_meetings():
     all_meetings = Meeting.query.all()
     return render_template('base-template.html',data=all_meetings)
 
-@app.route('/one-on-one')
-@app.route('/1-on-1')
-@app.route('/1-1')
-def project_one():
+@app.route('/one-on-one', methods=['GET','POST'])
+@app.route('/1-on-1', methods=['GET','POST'])
+@app.route('/1-1', methods=['GET','POST'])
+def one_on_one():
     '''
     Page for when on a one-on-one call. Allows for input notes to the database
     for the call.
@@ -141,11 +141,34 @@ def project_one():
     # Pull other information relevant for template (from event)
     # TODO: Some sort of name override (for misspellings or different spellings)
     event_name = event.get('summary')
+    
+    # TODO: Find Student entry by name
+    for test_str in event_name.split('-'):
+        test_str = test_str.strip()
+        student = Student.query.filter_by(name=test_str).first()
+        if student:
+            student_id = student.id
+            break
+
     # TODO: Ensure this is a URL
     zoom_link = event.get('location')
 
     # TODO: Pull info from database
     prev_status = 'Previous status for student updates'
+
+    # On submit
+    module = request.form.get('module')
+    additional_notes = request.form.get('additional_notes')
+    status = request.form.get('status')
+    if module:
+        meeting = actions.new_meeting(datetime.now(),'1:1')
+        # 
+        actions.add_note(
+            note=additional_notes,
+            status=status,
+            meeting_id=meeting.id,
+            student_id=student_id
+        )
 
     return render_template(
         'one-on-one.html',
@@ -156,3 +179,11 @@ def project_one():
         event_time_end = event_time_end,
         extra_debug = ''
     )
+
+@app.route('/all-notes')
+@app.route('/notes')
+def display_all_notes():
+    '''
+    '''
+    all_notes = Note.query.all()
+    return render_template('base-template.html',data=all_notes)

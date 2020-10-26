@@ -42,3 +42,23 @@ class Meeting(db.Model):
 
     def __repr__(self):
         return f'<{self.event_type} Meeting on {self.date}>'
+
+class Note(db.Model):
+    '''
+    '''
+    id = db.Column(db.Integer, primary_key=True)
+    status = db.Column(db.String(180), unique=False, nullable=True)
+    details = db.Column(db.String(800), unique=False, nullable=False)
+    # New note, new meeting
+    meeting_id = db.Column(db.Integer, db.ForeignKey('meeting.id'),
+        nullable=False)
+    meeting = db.relationship('Meeting',
+        backref=db.backref('posts', lazy=True))
+    # Associated with the student
+    student_id = db.Column(db.Integer, db.ForeignKey('student.id'),
+        nullable=False)
+    student = db.relationship('Student',
+        backref=db.backref('posts', lazy=True))
+
+    def __repr__(self):
+        return f'<Note "{self.status}">'

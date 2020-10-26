@@ -64,7 +64,7 @@
               <!-- Notes -->
               <div>
                 <!-- {Current Notes} -->
-                <form id="notes">
+                <form id="notes" action="{{url_for('one_on_one')}}" method="post">
                   <b>Status:</b><br/>
                   <input style="width:100%;" type="text" id="status" name="status" placeholder="{{status}}"><br/>
                   Currently on:<br/>
@@ -88,7 +88,7 @@
                   </div>
                   <br/><br/>
 
-                  <input type="submit" ></input>
+                  <input type="submit">
                 </form>
               </div>
             </div>

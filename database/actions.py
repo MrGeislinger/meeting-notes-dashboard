@@ -1,5 +1,5 @@
 from dashboardapp import db
-from database.models import Cohort, Student, Meeting
+from database.models import Cohort, Student, Meeting, Note
 
 
 
@@ -43,3 +43,18 @@ def new_meeting(meeting_time, event_type):
     db.session.add(new_meeting)
     db.session.commit()
     print('Meeting created')
+    # Return the entry created for reference
+    return new_meeting
+
+def add_note(note, meeting_id, student_id, status=None):
+    '''
+    '''
+    new_note = Note(
+        details=note,
+        status=status,
+        meeting_id=meeting_id,
+        student_id=student_id
+    )
+    db.session.add(new_note)
+    db.session.commit()
+    print('Note added')
