@@ -20,3 +20,15 @@ def create_cohort(cohort_name, start_date, graduation_date=None):
     db.session.add(new_cohort)
     db.session.commit()
     print('Cohort created')
+
+def add_student(name, email, cohort):
+    '''
+    '''
+    new_student = Student(
+        name=name,
+        email=email,
+        cohort_id=cohort
+    )
+    db.session.add(new_student)
+    db.session.commit()
+    print('Student added')

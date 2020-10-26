@@ -71,6 +71,23 @@ def create_cohort():
     # Use method to display all cohorts
     return display_all_cohorts()
 
+@app.route('/add-student', methods=['GET','POST'])
+def add_student():
+    '''
+    '''
+    #
+    student_name = request.form.get('student_name')
+    student_email = request.form.get('student_email')
+    student_cohort = request.form.get('student_cohort')
+    # Check if entries given (submitted)
+    if student_name and student_email and student_cohort:
+        print('Adding student')
+        actions.add_student(student_name,student_email,student_cohort)
+    # Get all the cohorts to add student to
+    all_cohorts = Cohort.query.all()
+
+    return render_template('add-student.html',all_cohorts=all_cohorts)
+
 @app.route('/one-on-one')
 @app.route('/1-on-1')
 @app.route('/1-1')
