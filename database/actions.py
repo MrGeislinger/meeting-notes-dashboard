@@ -46,14 +46,15 @@ def new_meeting(meeting_time, event_type):
     # Return the entry created for reference
     return new_meeting
 
-def add_note(note, meeting_id, student_id, status=None):
+def add_note(note, meeting_id, student_id, time, status=None):
     '''
     '''
     new_note = Note(
         details=note,
         status=status,
         meeting_id=meeting_id,
-        student_id=student_id
+        student_id=student_id,
+        time=time
     )
     db.session.add(new_note)
     db.session.commit()

@@ -161,14 +161,26 @@ def one_on_one():
     additional_notes = request.form.get('additional_notes')
     status = request.form.get('status')
     if module:
-        meeting = actions.new_meeting(datetime.now(),'1:1')
+        now = datetime.now()
+        meeting = actions.new_meeting(now,'1:1')
         # 
         actions.add_note(
             note=additional_notes,
             status=status,
             meeting_id=meeting.id,
-            student_id=student_id
+            student_id=student_id,
+            time=now
         )
+
+    # Get past notes
+    print('Recent Notes')
+    recent_notes = (Note.query.join(Meeting, Meeting.id == Note.meeting_id)
+        .filter(Note.student_id==student_id)
+        .order_by(Note.time.desc())
+        .limit(3).all()
+    )
+    if recent_notes:
+        prev_status = recent_notes[0].status
 
     return render_template(
         'one-on-one.html',
@@ -177,6 +189,7 @@ def one_on_one():
         status = prev_status,
         event_time_start = event_time_start,
         event_time_end = event_time_end,
+        recent_notes=recent_notes,
         extra_debug = ''
     )
 

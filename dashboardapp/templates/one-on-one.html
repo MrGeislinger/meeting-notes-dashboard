@@ -97,12 +97,14 @@
               <div>
                   <h3>Past Notes</h3>
                   <hr/>
+                  {% for note in recent_notes %}
                   <div>
-                      <h4>{DATE}</h4>
-                      <p>
-                          {RECENT NOTE}
-                      </p>
+                      <h4>{{note.time}}</h4>
+                      <p>Status: "{{note.status}}"</p>
+                      <blockquote><em>{{note.details}}</em></blockquote>
                   </div>
+                  <hr/>
+                  {% endfor %}
               </div>
             </div>
           </div>
