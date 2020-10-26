@@ -1,0 +1,23 @@
+<!doctype html>
+
+<html>
+<head>
+  <title>Students</title>
+</head>
+
+<body>
+  <div>
+    <h1>Students</h1>
+    <ul>
+      {% for student in all_students %}
+        <li>
+          <b>{{student.name}}</b><br/>
+          <b>{{student.email}}</b><br/>
+          <b>{{student.cohort_id}}</b><br/>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+  <hr/>
+</body>
+</html>

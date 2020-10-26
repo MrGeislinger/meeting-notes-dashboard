@@ -71,6 +71,11 @@ def create_cohort():
     # Use method to display all cohorts
     return display_all_cohorts()
 
+@app.route('/all-students')
+@app.route('/students')
+def display_all_students():
+    return render_template('students.html',all_students=Student.query.all())
+
 @app.route('/add-student', methods=['GET','POST'])
 def add_student():
     '''
@@ -83,6 +88,7 @@ def add_student():
     if student_name and student_email and student_cohort:
         print('Adding student')
         actions.add_student(student_name,student_email,student_cohort)
+        return render_template('students.html',all_students=Student.query.all())
     # Get all the cohorts to add student to
     all_cohorts = Cohort.query.all()
 
